@@ -1,7 +1,6 @@
-package tonydarko.spealth.ui;
+package tonydarko.spealth.controller;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -59,6 +58,16 @@ public class LoginActivity extends AppCompatActivity implements
         btnSignIn.setScopes(gso.getScopeArray());
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.btn_sign_in:
+                signIn();
+                break;
+        }
+    }
+
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -70,21 +79,12 @@ public class LoginActivity extends AppCompatActivity implements
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             Constants.setGoogleSignInAccount(acct);
+            Constants.setGoogleSignInResult(result);
             Log.e(TAG, "display name: " + acct.getDisplayName() + "}\n}}" + acct.getIdToken());
 
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.btn_sign_in:
-                signIn();
-                break;
         }
     }
 

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@mipmap/stephen"
-    tools:context=".ui.LoginActivity" >
+    tools:context=".controller.LoginActivity" >
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_sign_in"

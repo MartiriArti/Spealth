@@ -1,4 +1,4 @@
-package tonydarko.spealth.ui;
+package tonydarko.spealth.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +10,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +28,9 @@ import butterknife.OnClick;
 import tonydarko.spealth.R;
 import tonydarko.spealth.Utils.Constants;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    private GoogleApiClient mGoogleApiClient = Constants.getGoogleApiClient();
 
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
@@ -53,6 +58,12 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_settings:
                     getSupportActionBar().setTitle(R.string.title_settings);
                     return true;
+                case R.id.navigation_chats1:
+                    getSupportActionBar().setTitle(R.string.title_chats);
+                    return true;
+                case R.id.navigation_home1:
+                    getSupportActionBar().setTitle(R.string.title_settings);
+                    return true;
             }
             return false;
         }
@@ -77,14 +88,31 @@ public class HomeActivity extends AppCompatActivity {
                 .into(image);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
     }
 
     @OnClick(R.id.btn_sign_out)
-    public void onClickSignOut(){
-
-        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+    public void onClickSignOut() {
+        System.out.println(mGoogleApiClient);
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+        Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }
