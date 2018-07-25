@@ -27,21 +27,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tonydarko.spealth.R;
 import tonydarko.spealth.Utils.Constants;
+import tonydarko.spealth.controller.fragments.NewsFragment;
+import tonydarko.spealth.controller.fragments.SettingsFragment;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class HomeActivity extends AppCompatActivity {
 
-    private GoogleApiClient mGoogleApiClient = Constants.getGoogleApiClient();
 
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
-    @BindView(R.id.tv_name)
-    TextView name;
-    @BindView(R.id.tv_email)
-    TextView email;
-    @BindView(R.id.image_account)
-    ImageView image;
-    @BindView(R.id.btn_sign_out)
-    Button btnSignOut;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -50,19 +44,34 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    getSupportActionBar().setTitle(R.string.title_home);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, NewsFragment.newInstance())
+                            .commit();
                     return true;
                 case R.id.navigation_chats:
-                    getSupportActionBar().setTitle(R.string.title_chats);
-                    return true;
-                case R.id.navigation_settings:
-                    getSupportActionBar().setTitle(R.string.title_settings);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, NewsFragment.newInstance())
+                            .commit();
                     return true;
                 case R.id.navigation_chats1:
-                    getSupportActionBar().setTitle(R.string.title_chats);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, NewsFragment.newInstance())
+                            .commit();
                     return true;
                 case R.id.navigation_home1:
-                    getSupportActionBar().setTitle(R.string.title_settings);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, NewsFragment.newInstance())
+                            .commit();
+                    return true;
+                case R.id.navigation_settings:
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, SettingsFragment.newInstance())
+                            .commit();
                     return true;
             }
             return false;
@@ -77,42 +86,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        GoogleSignInAccount googleSignInAccount = Constants.getGoogleSignInAccount();
-
-        name.setText(googleSignInAccount.getDisplayName());
-        email.setText(googleSignInAccount.getEmail());
-        Glide.with(getApplicationContext()).load(googleSignInAccount.getPhotoUrl())
-                .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(image);
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-    }
-
-    @OnClick(R.id.btn_sign_out)
-    public void onClickSignOut() {
-        System.out.println(mGoogleApiClient);
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-        Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }
