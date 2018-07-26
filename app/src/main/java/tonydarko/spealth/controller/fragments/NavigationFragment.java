@@ -12,16 +12,16 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import tonydarko.spealth.R;
 
-public class NewsFragment extends Fragment {
+public class NavigationFragment extends Fragment {
 
-    public static NewsFragment newInstance() {
-        return new NewsFragment();
+    public static NavigationFragment newInstance() {
+        return new NavigationFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_news, container, false);
+        View root = inflater.inflate(R.layout.fragment_navigation, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_settings);
         ButterKnife.bind(this, root);
 
