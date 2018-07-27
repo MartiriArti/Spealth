@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements
             GoogleSignInAccount acct = result.getSignInAccount();
             Constants.setGoogleSignInAccount(acct);
             Constants.setGoogleSignInResult(result);
+
             Log.e(TAG, "display name: " + acct.getDisplayName() + "}\n}}" + acct.getIdToken());
 
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import java.util.Stack;
 
@@ -19,8 +18,6 @@ import butterknife.ButterKnife;
 import tonydarko.spealth.R;
 import tonydarko.spealth.controller.fragments.ChatFragment;
 import tonydarko.spealth.controller.fragments.HomeFragment;
-import tonydarko.spealth.controller.fragments.NavigationFragment;
-import tonydarko.spealth.controller.fragments.NewsFragment;
 import tonydarko.spealth.controller.fragments.SettingsFragment;
 
 public class HomeActivity extends AppCompatActivity implements
@@ -86,16 +83,6 @@ public class HomeActivity extends AppCompatActivity implements
                 return true;
             case R.id.navigation_chats:
                 replaceFragment(ChatFragment.newInstance());
-                menuItemsStack.push(item);
-                System.out.println(menuItemsStack.size());
-                return true;
-            case R.id.navigation_news:
-                replaceFragment(NewsFragment.newInstance());
-                menuItemsStack.push(item);
-                System.out.println(menuItemsStack.size());
-                return true;
-            case R.id.navigation_navigation:
-                replaceFragment(NavigationFragment.newInstance());
                 menuItemsStack.push(item);
                 System.out.println(menuItemsStack.size());
                 return true;
